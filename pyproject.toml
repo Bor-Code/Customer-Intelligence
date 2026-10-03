@@ -1,0 +1,56 @@
+[project]
+name = "ci"
+version = "0.1.0"
+description = "Retail Customer Intelligence Platform"
+requires-python = ">=3.12"
+dependencies = [
+    "prefect",
+    "polars",
+    "duckdb",
+    "pandera",
+    "scikit-learn",
+    "lightgbm",
+    "mlxtend",
+    "optuna",
+    "shap",
+    "mlflow",
+    "fastapi",
+    "pydantic",
+    "pydantic-settings",
+    "evidently",
+    "streamlit",
+    "uvicorn",
+    "pandas"
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "mypy",
+    "pytest",
+    "pre-commit"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "N", "C", "B"]
+ignore = []
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]
