@@ -14,16 +14,15 @@ def get_git_sha() -> str:
     except Exception:
         return "unknown"
 
+import io
+
 def hash_dataframe(df: pl.DataFrame) -> str:
     if df.is_empty():
         return hashlib.sha256(b"empty").hexdigest()
 
-    row_hash_sum = str(df.hash_rows().sum())
-    shape_str = str(df.shape)
-    schema_str = str(df.schema)
-
-    combined = f"{shape_str}_{schema_str}_{row_hash_sum}".encode("utf-8")
-    return hashlib.sha256(combined).hexdigest()
+    buf = io.BytesIO()
+    df.write_ipc(buf)
+    return hashlib.sha256(buf.getvalue()).hexdigest()
 
 @contextmanager
 def mlflow_run(experiment_name: str, run_name: str) -> Generator[mlflow.ActiveRun, None, None]:
