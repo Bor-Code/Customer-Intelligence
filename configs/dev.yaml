@@ -1,0 +1,4 @@
+app_name: "Customer Intelligence API (Dev)"
+debug: true
+db_path: "data/dev_gold.db"
+mlflow_tracking_uri: "http://localhost:5000"
