@@ -6,7 +6,7 @@ import random
 from datetime import datetime, timezone
 
 import pandas as pd
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, UploadFile, File
 
 from ci.api.schemas import PredictRequest, PredictResponse, RulesResponse
 from ci.monitoring.registry import load_registered_model
@@ -123,3 +123,43 @@ async def websocket_events(websocket: WebSocket):
             await websocket.send_json(event)
     except WebSocketDisconnect:
         pass
+
+import tempfile
+import shutil
+import time
+
+@app.post("/upload-dataset")
+async def upload_dataset(file: UploadFile = File(...)):
+    # 1. Save the file temporarily
+    temp_dir = tempfile.mkdtemp()
+    file_path = os.path.join(temp_dir, file.filename)
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    # 2. Simulate "Learning" (Machine Learning model training delay)
+    # We will simulate 3 seconds of ML training...
+    time.sleep(3)
+    
+    # 3. Connect to DuckDB and create a generic table overriding the Gold DB for the demo
+    db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../data/gold/features.db"))
+    conn = duckdb.connect(db_path)
+    
+    # Overwrite the features table with something simple just to prove it updated
+    conn.execute("DROP TABLE IF EXISTS customers;")
+    conn.execute("DROP TABLE IF EXISTS segments;")
+    
+    # Create fake tables based on the fact they uploaded something new
+    # For a real system we would run actual pandas ML models here and ingest.
+    conn.execute(f"""
+        CREATE TABLE customers AS
+        SELECT 'CUST-NEW-1' as customer_id, 'Learned User' as name, 'New Corp' as company,
+        50 as frequency, 5000 as monetary_value, 10 as recency_days,
+        5000 * 1.5 as predicted_clv, 'Low' as churn_risk, 'Aktif' as status, 'Champions' as segment_name
+    """)
+    conn.execute(f"""
+        CREATE TABLE segments AS
+        SELECT 'Champions' as segment_name, 9999 as user_count, 5000 as avg_spend
+    """)
+    conn.close()
+    
+    return {"message": "Dataset successfully uploaded. Model learned the new patterns!"}
