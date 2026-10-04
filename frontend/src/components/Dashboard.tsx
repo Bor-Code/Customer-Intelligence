@@ -24,7 +24,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="custom-tooltip">
-        <p className="label mono">Day {label}</p>
+        <p className="label mono">Gün {label}</p>
         <p className="value mono">${payload[0].value}</p>
       </div>
     );
@@ -46,21 +46,21 @@ const Dashboard = () => {
     <div className="dashboard-wrapper">
       <header className="dashboard-header">
         <div>
-          <h1>System Overview</h1>
-          <p className="subtitle">Real-time metrics and predictive indicators</p>
+          <h1>Sistem Genel Bakış</h1>
+          <p className="subtitle">Gerçek zamanlı metrikler ve öngörüsel göstergeler</p>
         </div>
       </header>
 
       <section className="grid-cards">
-        <StatCard title="TOTAL CUSTOMERS" value={stats?.total_customers || "---"} trend="+12.4%" type="positive" />
-        <StatCard title="AT-RISK (CHURN)" value={stats?.at_risk_churn || "---"} trend="-3.2%" type="positive" />
-        <StatCard title="AVERAGE CLV" value={stats?.avg_clv || "---"} trend="+5.1%" type="positive" />
-        <StatCard title="ACTIVE SEGMENTS" value={stats?.active_segments || "---"} trend="Stable" type="neutral" />
+        <StatCard title="TOPLAM MÜŞTERİ" value={stats?.total_customers || "---"} trend="+12.4%" type="positive" />
+        <StatCard title="RİSKLİ (KAYIP)" value={stats?.at_risk_churn || "---"} trend="-3.2%" type="positive" />
+        <StatCard title="ORT. MÜŞTERİ DEĞERİ" value={stats?.avg_clv || "---"} trend="+5.1%" type="positive" />
+        <StatCard title="AKTİF SEGMENTLER" value={stats?.active_segments || "---"} trend="Sabit" type="neutral" />
       </section>
 
       <section className="main-widgets">
         <div className="industrial-card chart-widget">
-          <h3>Revenue Forecast (30D)</h3>
+          <h3>Gelir Tahmini (30 Gün)</h3>
           <div className="recharts-wrapper">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={MOCK_FORECAST_DATA} margin={{ top: 20, right: 10, left: -20, bottom: 0 }}>
@@ -75,7 +75,7 @@ const Dashboard = () => {
         </div>
 
         <div className="industrial-card recommendations-widget">
-          <h3>Top Recommendations</h3>
+          <h3>Öne Çıkan Tavsiyeler</h3>
           <ul className="reco-list">
             <li>
               <span className="item-name">Wireless Headphones</span>

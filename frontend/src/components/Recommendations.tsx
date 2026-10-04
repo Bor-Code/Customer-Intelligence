@@ -9,21 +9,21 @@ const Recommendations = () => (
   <div className="page-wrapper">
     <header className="page-header">
       <div>
-        <h1>Recommendation Engine</h1>
-        <p className="subtitle">Collaborative filtering product affinities</p>
+        <h1>Tavsiye Motoru</h1>
+        <p className="subtitle">İşbirlikçi filtreleme ürün yakınlıkları</p>
       </div>
-      <button className="primary-btn">Run Engine</button>
+      <button className="primary-btn">Motoru Çalıştır</button>
     </header>
 
     <div className="industrial-card table-container">
       <table className="data-table">
         <thead>
           <tr>
-            <th>TARGET CUSTOMER</th>
-            <th>RECOMMENDED PRODUCT</th>
-            <th>AFFINITY SCORE</th>
-            <th>EXPECTED LIFT</th>
-            <th>ACTION</th>
+            <th>HEDEF MÜŞTERİ</th>
+            <th>TAVSİYE EDİLEN ÜRÜN</th>
+            <th>YAKINLIK SKORU</th>
+            <th>BEKLENEN ARTIŞ</th>
+            <th>İŞLEM</th>
           </tr>
         </thead>
         <tbody>
@@ -33,7 +33,7 @@ const Recommendations = () => (
               <td>{r.product}</td>
               <td className="mono risk-low">{r.score}</td>
               <td className="mono risk-low">{r.lift}</td>
-              <td><button className="action-link">Push Offer</button></td>
+              <td><button className="action-link">Teklif Sun</button></td>
             </tr>
           ))}
         </tbody>
