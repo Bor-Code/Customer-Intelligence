@@ -34,6 +34,38 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 const Dashboard = () => {
   const [stats, setStats] = useState<Stats | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<string>('');
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  const handleUpload = async () => {
+    if (!file) {
+      setUploadStatus('Lütfen önce bir CSV veri seti seçin!');
+      return;
+    }
+    setIsUploading(true);
+    setUploadStatus('Veri seti yükleniyor ve model yeni kalıpları ezberliyor (Öğrenme Aşaması)...');
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+      const res = await fetch('http://localhost:8000/upload-dataset', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      setUploadStatus(data.message || 'Model başarıyla eğitildi ve veritabanı güncellendi!');
+      // Refresh stats after successful upload
+      fetch('http://localhost:8000/stats')
+        .then(r => r.json())
+        .then(d => setStats(d));
+    } catch (err) {
+      console.error(err);
+      setUploadStatus('Hata: Model eğitimi başarısız oldu.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   useEffect(() => {
     fetch('http://localhost:8000/stats')
@@ -50,6 +82,35 @@ const Dashboard = () => {
           <p className="subtitle">Gerçek zamanlı metrikler ve öngörüsel göstergeler</p>
         </div>
       </header>
+
+      <div className="industrial-card" style={{marginTop: '2rem', borderColor: 'var(--primary-color)'}}>
+        <h3>Yapay Zeka Modeli Eğitimi (Veri Seti Yükle)</h3>
+        <p className="subtitle" style={{marginBottom: '1rem'}}>
+          Kendi veri setinizi yükleyin. Sistem veriyi okuyacak, analiz edecek ve özellikleri öğrenip analizleri güncelleyecektir.
+        </p>
+        <div className="form-group" style={{display: 'flex', gap: '1rem', alignItems: 'center'}}>
+          <input 
+            type="file" 
+            accept=".csv"
+            onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
+            className="industrial-input mono"
+            style={{flex: 1}}
+          />
+          <button 
+            className="primary-btn" 
+            onClick={handleUpload} 
+            disabled={isUploading}
+            style={{padding: '0.75rem 1.5rem'}}
+          >
+            {isUploading ? 'Eğitiliyor...' : 'Yükle & Öğren'}
+          </button>
+        </div>
+        {uploadStatus && (
+          <p className="mono" style={{marginTop: '1rem', color: isUploading ? 'var(--warning-color)' : 'var(--success-color)'}}>
+            &gt;_ {uploadStatus}
+          </p>
+        )}
+      </div>
 
       <section className="grid-cards">
         <StatCard title="TOPLAM MÜŞTERİ" value={stats?.total_customers || "---"} trend="+12.4%" type="positive" />
