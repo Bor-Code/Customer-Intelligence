@@ -2,10 +2,10 @@ import './Sidebar.css';
 
 const Sidebar = () => {
   return (
-    <aside className="sidebar glass-panel">
+    <aside className="sidebar industrial-panel">
       <div className="logo-container">
         <div className="logo-icon"></div>
-        <h2>Retail AI</h2>
+        <h2>RETAIL AI</h2>
       </div>
       <nav className="nav-menu">
         <a href="#" className="nav-item active">Dashboard</a>

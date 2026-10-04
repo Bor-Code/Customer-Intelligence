@@ -9,11 +9,14 @@ interface StatCardProps {
 
 const StatCard = ({ title, value, trend, type }: StatCardProps) => {
   return (
-    <div className="glass-card stat-card">
+    <div className="industrial-card stat-card">
       <h4 className="stat-title">{title}</h4>
       <div className="stat-body">
         <span className="stat-value">{value}</span>
+      </div>
+      <div className="stat-footer">
         <span className={`stat-trend trend-${type}`}>{trend}</span>
+        <span className="stat-period">vs last month</span>
       </div>
     </div>
   );
