@@ -1,0 +1,4 @@
+app_name: "Customer Intelligence API"
+debug: false
+db_path: "data/gold/features.db"
+mlflow_tracking_uri: "http://mlflow:5000"

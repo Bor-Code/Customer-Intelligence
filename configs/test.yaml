@@ -1,0 +1,4 @@
+app_name: "Customer Intelligence API (Test)"
+debug: true
+db_path: ":memory:"
+mlflow_tracking_uri: "sqlite:///tests_mlruns.db"
