@@ -1,0 +1,33 @@
+.terminal-window {
+  background: #000;
+  border: 1px solid var(--surface-border);
+  padding: 1.5rem;
+  border-radius: 2px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.log-line {
+  color: #10b981;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  word-break: break-all;
+}
+
+.log-prefix {
+  color: #52525b;
+  margin-right: 0.5rem;
+}
+
+.blinking-cursor::after {
+  content: '█';
+  animation: blink 1s step-end infinite;
+  color: #10b981;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
