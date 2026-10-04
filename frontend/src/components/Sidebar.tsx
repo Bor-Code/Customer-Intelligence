@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom';
 import './Sidebar.css';
 
 const Sidebar = () => {
@@ -8,11 +9,11 @@ const Sidebar = () => {
         <h2>RETAIL AI</h2>
       </div>
       <nav className="nav-menu">
-        <a href="#" className="nav-item active">Dashboard</a>
-        <a href="#" className="nav-item">Customers</a>
-        <a href="#" className="nav-item">Segments</a>
-        <a href="#" className="nav-item">Recommendations</a>
-        <a href="#" className="nav-item">Settings</a>
+        <NavLink to="/" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>Dashboard</NavLink>
+        <NavLink to="/customers" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>Customers</NavLink>
+        <NavLink to="/segments" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>Segments</NavLink>
+        <NavLink to="/recommendations" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>Recommendations</NavLink>
+        <NavLink to="/settings" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>Settings</NavLink>
       </nav>
     </aside>
   );
