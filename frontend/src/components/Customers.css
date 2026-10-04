@@ -111,3 +111,32 @@
 .action-link:hover {
   color: var(--primary-color);
 }
+
+.filters-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.search-input {
+  flex: 1;
+  background: var(--surface-color);
+  border: 1px solid var(--surface-border);
+  color: var(--text-main);
+  padding: 0.5rem 1rem;
+  border-radius: 2px;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--primary-color);
+}
+
+.filter-select {
+  background: var(--surface-color);
+  border: 1px solid var(--surface-border);
+  color: var(--text-main);
+  padding: 0.5rem 1rem;
+  border-radius: 2px;
+  outline: none;
+}
