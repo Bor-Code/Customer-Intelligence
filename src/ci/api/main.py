@@ -37,11 +37,13 @@ app.add_middleware(
 )
 
 import duckdb
+import os
 
 @app.get("/stats")
 def get_stats() -> dict[str, Any]:
     try:
-        conn = duckdb.connect("../../data/gold/features.db", read_only=True)
+        db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../data/gold/features.db"))
+        conn = duckdb.connect(db_path, read_only=True)
         # Assuming the database has 'customers' and 'segments' tables compiled by Prefect
         total_customers = conn.execute("SELECT COUNT(*) FROM customers").fetchone()[0]
         active_segments = conn.execute("SELECT COUNT(DISTINCT segment_name) FROM segments").fetchone()[0]
@@ -55,6 +57,7 @@ def get_stats() -> dict[str, Any]:
             "active_segments": str(active_segments)
         }
     except Exception as e:
+        print("DB ERROR:", str(e))
         # Fallback to mock data if DB is missing or tables are not created yet
         return {
             "total_customers": "24,592",
