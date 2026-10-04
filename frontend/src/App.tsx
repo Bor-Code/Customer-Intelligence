@@ -4,6 +4,7 @@ import Dashboard from './components/Dashboard';
 import Customers from './components/Customers';
 import Segments from './components/Segments';
 import Recommendations from './components/Recommendations';
+import RawData from './components/RawData';
 import Settings from './components/Settings';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
             <Route path="/customers" element={<Customers />} />
             <Route path="/segments" element={<Segments />} />
             <Route path="/recommendations" element={<Recommendations />} />
+            <Route path="/raw-data" element={<RawData />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>
         </main>
