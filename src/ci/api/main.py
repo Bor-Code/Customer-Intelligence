@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException
 
 from ci.api.schemas import PredictRequest, PredictResponse, RulesResponse
 from ci.monitoring.registry import load_registered_model
+from fastapi.middleware.cors import CORSMiddleware
 
 models: dict[str, Any] = {}
 
@@ -22,6 +23,24 @@ async def lifespan(app: FastAPI):
     models.clear()
 
 app = FastAPI(title="Customer Intelligence API", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/stats")
+def get_stats() -> dict[str, Any]:
+    # Mock aggregation since DB is isolated, providing demo values for frontend
+    return {
+        "total_customers": "24,592",
+        "at_risk_churn": "1,240",
+        "avg_clv": "$1,840",
+        "active_segments": "6"
+    }
 
 @app.post("/predict/{model_name}", response_model=PredictResponse)
 def predict(model_name: str, request: PredictRequest) -> PredictResponse:
