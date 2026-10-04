@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './Customers.css';
 
 const MOCK_CUSTOMERS = [
@@ -8,48 +9,83 @@ const MOCK_CUSTOMERS = [
   { id: 'CUST-3310', name: 'Wayne Enterprises', clv: '$88,300', churnRisk: 'Düşük', status: 'Aktif' },
 ];
 
-const Customers = () => (
-  <div className="page-wrapper">
-    <header className="page-header">
-      <div>
-        <h1>Müşteri Rehberi</h1>
-        <p className="subtitle">Detaylı profiller ve öngörüsel metrikler</p>
-      </div>
-      <button className="primary-btn">Veriyi Dışa Aktar</button>
-    </header>
+const Customers = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [riskFilter, setRiskFilter] = useState('Hepsi');
 
-    <div className="industrial-card table-container">
-      <table className="data-table">
-        <thead>
-          <tr>
-            <th>MÜŞTERİ ID</th>
-            <th>ŞİRKET / İSİM</th>
-            <th>ÖNGÖRÜLEN LBD</th>
-            <th>KAYIP RİSKİ</th>
-            <th>DURUM</th>
-            <th>İŞLEMLER</th>
-          </tr>
-        </thead>
-        <tbody>
-          {MOCK_CUSTOMERS.map(c => {
-            const riskClass = c.churnRisk === 'Düşük' ? 'risk-low' : (c.churnRisk === 'Orta' ? 'risk-medium' : 'risk-high');
-            return (
-              <tr key={c.id}>
-                <td className="mono">{c.id}</td>
-                <td>{c.name}</td>
-                <td className="mono">{c.clv}</td>
-                <td>
-                  <span className={`risk-badge ${riskClass}`}>{c.churnRisk}</span>
-                </td>
-                <td>{c.status}</td>
-                <td><button className="action-link">Profili Gör</button></td>
+  const filteredCustomers = MOCK_CUSTOMERS.filter(c => {
+    const matchesSearch = c.name.toLowerCase().includes(searchTerm.toLowerCase()) || c.id.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRisk = riskFilter === 'Hepsi' || c.churnRisk === riskFilter;
+    return matchesSearch && matchesRisk;
+  });
+
+  return (
+    <div className="page-wrapper">
+      <header className="page-header">
+        <div>
+          <h1>Müşteri Rehberi</h1>
+          <p className="subtitle">Detaylı profiller ve öngörüsel metrikler</p>
+        </div>
+        <button className="primary-btn">Veriyi Dışa Aktar</button>
+      </header>
+
+      <div className="filters-bar">
+        <input 
+          type="text" 
+          className="search-input mono" 
+          placeholder="Müşteri ID veya İsim ile ara..." 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <select 
+          className="filter-select mono" 
+          value={riskFilter}
+          onChange={(e) => setRiskFilter(e.target.value)}
+        >
+          <option value="Hepsi">Tüm Risk Seviyeleri</option>
+          <option value="Düşük">Düşük Risk</option>
+          <option value="Orta">Orta Risk</option>
+          <option value="Yüksek">Yüksek Risk</option>
+        </select>
+      </div>
+
+      <div className="industrial-card table-container">
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>MÜŞTERİ ID</th>
+              <th>ŞİRKET / İSİM</th>
+              <th>ÖNGÖRÜLEN LBD</th>
+              <th>KAYIP RİSKİ</th>
+              <th>DURUM</th>
+              <th>İŞLEMLER</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredCustomers.length === 0 ? (
+              <tr>
+                <td colSpan={6} style={{textAlign: 'center', padding: '2rem', color: 'var(--text-muted)'}}>Sonuç bulunamadı.</td>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ) : filteredCustomers.map(c => {
+              const riskClass = c.churnRisk === 'Düşük' ? 'risk-low' : (c.churnRisk === 'Orta' ? 'risk-medium' : 'risk-high');
+              return (
+                <tr key={c.id}>
+                  <td className="mono">{c.id}</td>
+                  <td>{c.name}</td>
+                  <td className="mono">{c.clv}</td>
+                  <td>
+                    <span className={`risk-badge ${riskClass}`}>{c.churnRisk}</span>
+                  </td>
+                  <td>{c.status}</td>
+                  <td><button className="action-link">Profili Gör</button></td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default Customers;
