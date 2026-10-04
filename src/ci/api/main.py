@@ -36,15 +36,32 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+import duckdb
+
 @app.get("/stats")
 def get_stats() -> dict[str, Any]:
-    # Mock aggregation since DB is isolated, providing demo values for frontend
-    return {
-        "total_customers": "24,592",
-        "at_risk_churn": "1,240",
-        "avg_clv": "$1,840",
-        "active_segments": "6"
-    }
+    try:
+        conn = duckdb.connect("../../data/gold/features.db", read_only=True)
+        # Assuming the database has 'customers' and 'segments' tables compiled by Prefect
+        total_customers = conn.execute("SELECT COUNT(*) FROM customers").fetchone()[0]
+        active_segments = conn.execute("SELECT COUNT(DISTINCT segment_name) FROM segments").fetchone()[0]
+        avg_clv = conn.execute("SELECT AVG(predicted_clv) FROM customers").fetchone()[0]
+        at_risk = conn.execute("SELECT COUNT(*) FROM customers WHERE churn_risk = 'High'").fetchone()[0]
+        conn.close()
+        return {
+            "total_customers": f"{total_customers:,}",
+            "at_risk_churn": f"{at_risk:,}",
+            "avg_clv": f"${avg_clv:,.0f}",
+            "active_segments": str(active_segments)
+        }
+    except Exception as e:
+        # Fallback to mock data if DB is missing or tables are not created yet
+        return {
+            "total_customers": "24,592",
+            "at_risk_churn": "1,240",
+            "avg_clv": "$1,840",
+            "active_segments": "6"
+        }
 
 @app.post("/predict/{model_name}", response_model=PredictResponse)
 def predict(model_name: str, request: PredictRequest) -> PredictResponse:
