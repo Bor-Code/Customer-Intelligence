@@ -1,7 +1,24 @@
+import { useEffect, useState } from 'react';
 import StatCard from './StatCard';
 import './Dashboard.css';
 
+interface Stats {
+  total_customers: string;
+  at_risk_churn: string;
+  avg_clv: string;
+  active_segments: string;
+}
+
 const Dashboard = () => {
+  const [stats, setStats] = useState<Stats | null>(null);
+
+  useEffect(() => {
+    fetch('http://localhost:8000/stats')
+      .then(res => res.json())
+      .then(data => setStats(data))
+      .catch(err => console.error("API Fetch Error:", err));
+  }, []);
+
   return (
     <div className="dashboard-wrapper">
       <header className="dashboard-header">
@@ -12,10 +29,10 @@ const Dashboard = () => {
       </header>
 
       <section className="grid-cards">
-        <StatCard title="Total Customers" value="24,592" trend="+12%" type="positive" />
-        <StatCard title="At-Risk (Churn)" value="1,240" trend="-3%" type="positive" />
-        <StatCard title="Avg CLV" value="$1,840" trend="+5%" type="positive" />
-        <StatCard title="Active Segments" value="6" trend="Stable" type="neutral" />
+        <StatCard title="Total Customers" value={stats?.total_customers || "..."} trend="+12%" type="positive" />
+        <StatCard title="At-Risk (Churn)" value={stats?.at_risk_churn || "..."} trend="-3%" type="positive" />
+        <StatCard title="Avg CLV" value={stats?.avg_clv || "..."} trend="+5%" type="positive" />
+        <StatCard title="Active Segments" value={stats?.active_segments || "..."} trend="Stable" type="neutral" />
       </section>
 
       <section className="main-widgets">
