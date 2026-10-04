@@ -49,3 +49,28 @@
   color: var(--bg-color);
   background: var(--primary-color);
 }
+
+.theme-switcher {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--surface-border);
+}
+
+.theme-lbl {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.theme-select {
+  background: var(--bg-color);
+  border: 1px solid var(--surface-border);
+  color: var(--text-main);
+  padding: 0.5rem;
+  border-radius: 2px;
+  outline: none;
+  font-size: 0.75rem;
+}

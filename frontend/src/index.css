@@ -13,6 +13,28 @@
   --font-mono: 'JetBrains Mono', monospace;
 }
 
+[data-theme='light'] {
+  --bg-color: #f4f4f5;
+  --surface-color: #ffffff;
+  --surface-border: #e4e4e7;
+  --primary-color: #3b82f6;
+  --text-main: #18181b;
+  --text-muted: #71717a;
+  --danger-color: #ef4444;
+  --success-color: #10b981;
+}
+
+[data-theme='cyberpunk'] {
+  --bg-color: #050505;
+  --surface-color: #121212;
+  --surface-border: #facc15;
+  --primary-color: #facc15;
+  --text-main: #facc15;
+  --text-muted: #a1a1aa;
+  --danger-color: #ef4444;
+  --success-color: #22d3ee;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
