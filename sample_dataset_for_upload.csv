@@ -1,0 +1,8 @@
+transaction_id,customer_id,event_type,amount,timestamp
+tx-10001,USER-998,checkout,1299.99,2023-10-01T14:30:00Z
+tx-10002,USER-998,add_to_cart,45.00,2023-10-02T09:15:00Z
+tx-10003,USER-442,checkout,850.50,2023-10-02T16:45:00Z
+tx-10004,USER-117,checkout,120.00,2023-10-03T11:20:00Z
+tx-10005,USER-998,page_view,0.00,2023-10-04T08:10:00Z
+tx-10006,USER-333,checkout,2500.00,2023-10-04T19:05:00Z
+tx-10007,USER-442,add_to_cart,15.99,2023-10-05T10:30:00Z
