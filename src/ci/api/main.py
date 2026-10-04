@@ -1,8 +1,12 @@
 from contextlib import asynccontextmanager
 from typing import Any
 
+import asyncio
+import random
+from datetime import datetime, timezone
+
 import pandas as pd
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 
 from ci.api.schemas import PredictRequest, PredictResponse, RulesResponse
 from ci.monitoring.registry import load_registered_model
@@ -77,3 +81,25 @@ def get_basket_rules() -> RulesResponse:
         return RulesResponse(rules=rules_list)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.websocket("/ws/events")
+async def websocket_events(websocket: WebSocket):
+    await websocket.accept()
+    event_types = ["page_view", "add_to_cart", "checkout", "search", "login", "view_item"]
+    users = ["CUST-8239", "CUST-1042", "CUST-5512", "CUST-9921", "CUST-3310"]
+    counter = 1000
+    try:
+        while True:
+            await asyncio.sleep(random.uniform(0.5, 2.5))
+            counter += 1
+            event = {
+                "event_id": f"e-{counter}",
+                "timestamp": datetime.now(timezone.utc).isoformat() + "Z",
+                "type": random.choice(event_types),
+                "user_id": random.choice(users),
+            }
+            if event["type"] in ["add_to_cart", "checkout"]:
+                event["amount"] = round(random.uniform(15.0, 850.0), 2)
+            await websocket.send_json(event)
+    except WebSocketDisconnect:
+        pass

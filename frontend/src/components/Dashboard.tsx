@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import StatCard from './StatCard';
 import './Dashboard.css';
 
@@ -8,6 +9,28 @@ interface Stats {
   avg_clv: string;
   active_segments: string;
 }
+
+const MOCK_FORECAST_DATA = [
+  { day: '01', revenue: 4000 },
+  { day: '05', revenue: 3000 },
+  { day: '10', revenue: 5500 },
+  { day: '15', revenue: 4500 },
+  { day: '20', revenue: 6000 },
+  { day: '25', revenue: 7200 },
+  { day: '30', revenue: 8500 },
+];
+
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="custom-tooltip">
+        <p className="label mono">Day {label}</p>
+        <p className="value mono">${payload[0].value}</p>
+      </div>
+    );
+  }
+  return null;
+};
 
 const Dashboard = () => {
   const [stats, setStats] = useState<Stats | null>(null);
@@ -38,9 +61,16 @@ const Dashboard = () => {
       <section className="main-widgets">
         <div className="industrial-card chart-widget">
           <h3>Revenue Forecast (30D)</h3>
-          <div className="placeholder-chart">
-            <div className="chart-grid"></div>
-            <div className="chart-line"></div>
+          <div className="recharts-wrapper">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={MOCK_FORECAST_DATA} margin={{ top: 20, right: 10, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
+                <XAxis dataKey="day" stroke="#a1a1aa" tick={{fill: '#a1a1aa', fontSize: 12, fontFamily: 'var(--font-mono)'}} />
+                <YAxis stroke="#a1a1aa" tick={{fill: '#a1a1aa', fontSize: 12, fontFamily: 'var(--font-mono)'}} />
+                <Tooltip content={<CustomTooltip />} />
+                <Line type="monotone" dataKey="revenue" stroke="#fafafa" strokeWidth={2} dot={{ fill: '#fafafa', r: 4 }} activeDot={{ r: 6, fill: '#10b981' }} />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
